@@ -1,0 +1,187 @@
+class ShipmentOrder{
+  Status{
+    
+    Open{
+      assignOrder(WarehouseStaff staff, TimeEstimate timeEstimate, PriorityLevel priority, boolean requiresApproval) [canBeAssigned(staff)]/{
+        doAssignOrder(staff, timeEstimate, priority, requiresApproval);
+      }
+      -> Assigned;
+      
+      assignOrder(WarehouseStaff staff, TimeEstimate timeEstimate, PriorityLevel priority, boolean requiresApproval) [!canBeAssigned(staff)]/{
+        rejectAssignOrder("Staff to assign does not exist.");
+      }
+      -> Open;
+      
+      startOrder()/{
+        rejectStartOrder("Cannot start a shipment order which is open.");
+      }
+      -> Open;
+      
+      completeOrder()/{
+        rejectCompleteOrder("Cannot complete a shipment order which is open.");
+      }
+      -> Open;
+      
+      disapproveOrder(Date date, String description)/{
+        rejectDisapproveOrder("Cannot disapprove a shipment order which is open.");
+      }
+      -> Open;
+      
+      approveShipment()/{
+        rejectApproveShipment("Cannot approve a shipment order which is open.");
+      }
+      -> Open;
+    }
+    
+    Assigned{
+      assignOrder(WarehouseStaff staff, TimeEstimate timeEstimate, PriorityLevel priority, boolean requiresApproval)/{
+        rejectAssignOrder("The shipment order is already assigned.");
+      }
+      -> Assigned;
+      
+      startOrder() -> InProgress;
+      
+      completeOrder()/{
+        rejectCompleteOrder("Cannot complete a shipment order which is assigned.");
+      }
+      -> Assigned;
+      
+      disapproveOrder(Date date, String description)/{
+        rejectDisapproveOrder("Cannot disapprove a shipment order which is assigned.");
+      }
+      -> Assigned;
+      
+      approveShipment()/{
+        rejectApproveShipment("Cannot approve a shipment order which is assigned.");
+      }
+      -> Assigned;
+    }
+    
+    InProgress{
+      assignOrder(WarehouseStaff staff, TimeEstimate timeEstimate, PriorityLevel priority, boolean requiresApproval)/{
+        rejectAssignOrder("Cannot assign a shipment order which is in progress.");
+      }
+      -> InProgress;
+      
+      startOrder()/{
+        rejectStartOrder("The shipment order is already in progress.");
+      }
+      -> InProgress;
+      
+      completeOrder()[this.hasOrderApprover()]/{
+        
+      }
+      -> Completed;
+      
+      completeOrder()[!this.hasOrderApprover()]/{
+      }
+      -> Closed;
+      
+      disapproveOrder(Date date, String description)/{
+        rejectDisapproveOrder("Cannot disapprove a shipment order which is in progress.");
+      }
+      -> InProgress;
+      
+      approveShipment()/{
+        rejectApproveShipment("Cannot approve a shipment order which is in progress.");
+      }
+      -> InProgress;
+    }
+    Completed{
+      
+      assignOrder(WarehouseStaff staff, TimeEstimate timeEstimate, PriorityLevel priority, boolean requiresApproval)/{
+        rejectAssignOrder("Cannot assign a shipment order which is completed.");
+      }
+      -> Completed;
+      
+      startOrder()/{
+        rejectStartOrder("Cannot start a shipment order which is completed.");
+      }
+      -> Completed;
+      
+      disapproveOrder(Date date, String description)/{
+        doDisapproveOrder(date, description);
+      }
+      -> InProgress;
+      
+      approveShipment() -> Closed;
+      
+      completeOrder()/{
+        rejectCompleteOrder("The shipment order is already completed.");
+      }
+      -> Completed;
+    }
+    Closed{
+      assignOrder(WarehouseStaff staff, TimeEstimate timeEstimate, PriorityLevel priority, boolean requiresApproval)/{
+        rejectAssignOrder("Cannot assign a shipment order which is closed.");
+      }
+      -> Closed;
+      
+      startOrder()/{
+        rejectStartOrder("Cannot start a shipment order which is closed.");
+      }
+      -> Closed;
+      
+      completeOrder()/{
+        rejectCompleteOrder("The shipment order is already closed.");
+      }
+      -> Closed;
+      
+      disapproveOrder(Date date, String description)/{
+        rejectDisapproveOrder("Cannot disapprove a shipment order which is closed.");
+      }
+      -> Closed;
+      
+      approveShipment()/{
+        rejectApproveShipment("The shipment order is already closed.");
+      }
+      -> Closed;
+    }
+  }
+  
+  private void doAssignOrder(WarehouseStaff staff, TimeEstimate timeEstimate, PriorityLevel priority, boolean requiresApproval){
+    WareFlow wareFlow = this.getWareFlow();
+    this.setOrderPicker(staff);
+    this.setTimeToFullfill(timeEstimate);
+    this.setPriority(priority);
+    if (requiresApproval){
+      this.setOrderApprover(wareFlow.getManager());
+    }
+  }
+  
+  private boolean canBeAssigned(WarehouseStaff staff){
+    WareFlow wareFlow = this.getWareFlow();
+    if(staff != null) {
+	    if(!staff.getUsername().equalsIgnoreCase("manager")) {
+		    Employee employee = (Employee) staff;
+		    return (wareFlow.indexOfEmployee(employee) != -1);
+	    }
+	    return true;
+    }
+    return false;
+  }
+  
+  private void rejectAssignOrder(String error){
+    throw new RuntimeException(error);
+  }
+  
+  private void rejectStartOrder(String error){
+    throw new RuntimeException(error);
+  }
+  
+  private void rejectCompleteOrder(String error){
+    throw new RuntimeException(error);
+  }
+  
+  private void doDisapproveOrder(Date date, String description){
+    this.addShipmentNote(date, description, this.getOrderApprover());
+  }
+  
+  private void rejectDisapproveOrder(String error){
+    throw new RuntimeException(error);
+  }
+  
+  private void rejectApproveShipment(String error){
+    throw new RuntimeException(error);
+  }
+}

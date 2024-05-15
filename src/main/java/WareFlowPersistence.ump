@@ -1,0 +1,48 @@
+class WareFlow{
+    public void reinitialize(){
+        User.reinitializeUniqueUsername(getManager(), getClients(), getEmployees());
+        ShipmentOrder.reinitializeUniqueId(getOrders());
+        ItemContainer.reinitializeUniqueContainerNumber(getItemContainers());
+        ItemType.reinitializeUniqueName(getItemTypes());
+    }
+}
+
+class User{
+    public static void reinitializeUniqueUsername(Manager manager, List<Client> clients, List<Employee> employees){
+        usersByUsername.clear();
+        usersByUsername.put(manager.getUsername(), (User) manager);
+        for (var c : clients){
+            usersByUsername.put(c.getUsername(), (User) c);
+        }
+        for (var e : employees){
+            usersByUsername.put(e.getUsername(), (User) e);
+        }
+    }
+}
+
+class ShipmentOrder{
+    public static void reinitializeUniqueId(List<ShipmentOrder> orders){
+        shipmentordersById.clear();
+        for (var o : orders){
+            shipmentordersById.put(o.getId(), o);
+        }
+    }
+}
+
+class ItemContainer{
+    public static void reinitializeUniqueContainerNumber(List<ItemContainer> containers){
+        itemcontainersByContainerNumber.clear();
+        for (var ic : containers){
+            itemcontainersByContainerNumber.put(ic.getContainerNumber(), ic);
+        }
+    }
+}
+
+class ItemType{
+    public static void reinitializeUniqueName(List<ItemType> types){
+        itemtypesByName.clear();
+        for (var t : types){
+            itemtypesByName.put(t.getName(), t);
+        }
+    }
+}

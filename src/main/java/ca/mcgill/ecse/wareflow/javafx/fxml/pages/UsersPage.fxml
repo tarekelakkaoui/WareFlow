@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse.wareflow.javafx.fxml.controllers.UsersPageController">
+   <children>
+      <Label layoutX="179.0" layoutY="37.0" prefHeight="80.0" prefWidth="380.0" text="User Type">
+         <font>
+            <Font size="54.0" />
+         </font>
+      </Label>
+      <Button fx:id="employeeButton" layoutX="233.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleEmployeeButtonAction" prefHeight="68.0" prefWidth="135.0" text="Employee" />
+      <Button fx:id="guestButton" layoutX="233.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleGuestButtonAction" prefHeight="68.0" prefWidth="135.0" text="Guest" />
+      <Button fx:id="managerButton" layoutX="233.0" layoutY="282.0" mnemonicParsing="false" onAction="#handleManagerButtonAction" prefHeight="68.0" prefWidth="135.0" text="Manager" />
+   </children>
+</AnchorPane>

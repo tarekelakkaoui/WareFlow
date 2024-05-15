@@ -1,0 +1,86 @@
+for each User:
+   // unique username already captured by unique keyword in Umple
+
+   // username must not contain any spaces
+   not username.contains(" ")
+
+   // username only contains English letters and numbers
+   forAll character in username it is true that
+	character in "a-zA-Z0-9"
+
+   // username cannot be manager unless it is for the manager
+   (not (self instanceof Manager)) implies (username <> "manager")
+
+   // name must not null
+   name <> null
+
+   // password must not be empty or null
+   password <> ""
+   password <> null
+
+   // phoneNumber must not null
+   phoneNumber <> null
+
+for each Manager:
+   // username has to be manager
+   username = "manager"
+
+   // password must be at least four characters long
+   password.length() > 3
+   // password must contain a special character out of !#$
+   password.contains("!") or password.contains("#") or password.contains("$")
+   // password must contain an upper case character
+   there exists a character c in password such that Character.isUpperCase(c) = true
+   // password must contain a lower case character
+   there exists a character c in password such that Character.isLowerCase(c) = true
+
+for each Client:
+   // address must not be empty or null
+   address <> ""
+   address <> null
+
+for each ItemType:
+   // unique name already captured by unique keyword in Umple
+
+   // name must not be empty or null
+   name <> ""
+   name <> null
+
+   // expected life span must be greater than zero
+   expectedLifeSpan > 0
+
+for each ItemContainer:
+   // unique container number already captured by unique keyword in Umple
+
+   // asset number must be greater than or equal to one
+   containerNumber >= 1
+
+   // area number must be greater than or equal to zero
+   areaNumber >= 0
+
+   // slot number must be greater than or equal to zero
+   slotNumber >= 0
+
+for each ShipmentOrder:
+   // unique id already captured by unique keyword in Umple
+
+   // description must not be empty or null
+   description <> ""
+   description <> null
+
+   // two imageURLs of the same ticket cannot be the same
+   forAll i1, i2 in documentImages it is true that
+      (i1 <> i2) implies (i1.imageURL <> i2.imageURL)
+
+for each ShipmentNote:
+   // description must not be empty or null
+   description <> ""
+   description <> null
+
+for each BarcodeImage:
+   // URL must not be empty or null
+   imageURL <> ""
+   imageURL <> null
+
+   // URL must start with either http:// or https://
+   imageURL.substring(0, 6) = "http://" or imageURL.substring(0, 7) = "https://"

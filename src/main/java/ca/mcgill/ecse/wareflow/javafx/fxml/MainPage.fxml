@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox minHeight="1200" minWidth="-Infinity" prefHeight="1000.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane minHeight="1200.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+		<tabs>
+		  <Tab text="Item Containers">
+		    <content>
+		      <fx:include source="pages/ItemContainersPage.fxml" />
+		    </content>
+		  </Tab>
+		  <Tab text="User Types">
+		    <content>
+		      <fx:include source="pages/UsersPage.fxml" />
+		    </content>
+		  </Tab>
+		  <Tab text="Item Types">
+		    <content>
+		      <fx:include source="pages/ItemTypesPage.fxml" />
+		    </content>
+		  </Tab>
+		  <Tab text="Shipment Orders">
+		    <content>
+		      <fx:include source="pages/ShipmentOrdersPage.fxml" />
+		    </content>
+		  </Tab>
+		  <Tab text="List View">
+		    <content>
+		      <fx:include source="pages/ListViewPage.fxml" />
+		    </content>
+		  </Tab>
+		  <Tab text="Update Shipment Order">
+		    <content>
+		      <fx:include source="pages/AssignUpdatePage.fxml" />
+		    </content>
+		  </Tab>
+		  <Tab text="Shipment Note">
+		    <content>
+		      <fx:include source="pages/ShipmentNotePage.fxml" />
+		    </content>
+		  </Tab>
+		</tabs>
+      </TabPane>
+   </children>
+</VBox>

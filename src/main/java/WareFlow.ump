@@ -1,0 +1,113 @@
+namespace ca.mcgill.ecse.wareflow.model;
+
+use WareFlowStates.ump;
+use WareFlowPersistence.ump;
+
+class WareFlow
+{
+  1 <@>- * Employee employees;
+  1 <@>- * Client clients;
+  1 <@>- 0..1 Manager manager;
+  1 <@>- * ShipmentOrder orders;
+  1 <@>- * ItemType itemTypes;
+  1 <@>- * ItemContainer itemContainers;
+}
+
+class User
+{
+  abstract;
+  unique String username;
+  String name;
+  String password;
+  String phoneNumber;
+}
+
+class WarehouseStaff
+{
+  isA User;
+  abstract;
+}
+
+class Client
+{
+  isA User;
+  String address;
+}
+
+class Employee
+{
+  isA WarehouseStaff;
+}
+
+class Manager
+{
+  isA WarehouseStaff;
+}
+
+class ShipmentOrder
+{
+  1 order <@>- * ShipmentNote shipmentNotes;
+
+  unique Integer id;
+  Date placedOnDate;
+  String description;
+  Integer quantity;
+
+  enum TimeEstimate{lessThanADay, oneToThreeDays, threeToSevenDays, oneToThreeWeeks, threeOrMoreWeeks}
+  lazy TimeEstimate timeToFullfill;
+
+  enum PriorityLevel {Urgent, Normal, Low}
+  lazy PriorityLevel priority;
+}
+
+class ShipmentNote
+{
+  Date date;
+  String description;
+}
+
+class ItemContainer
+{
+  unique Integer containerNumber;
+  Integer areaNumber;
+  Integer slotNumber;
+  Date addedOnDate;
+}
+
+class ItemType
+{
+  unique String name;
+  Integer expectedLifeSpanInDays;
+}
+
+association 
+{  
+  1 User orderPlacer -- * ShipmentOrder placedOrders;  
+}
+
+association 
+{  
+  1 WarehouseStaff noteTaker -- * ShipmentNote shipmentNotes;  
+}
+
+association 
+{
+  0..1 WarehouseStaff orderPicker -- * ShipmentOrder shipmentOrders;
+}
+
+association 
+{
+  0..1 ItemContainer container -- * ShipmentOrder shipmentOrders;
+}
+
+association 
+{
+  1 ItemType itemType -- * ItemContainer itemContainers;
+}
+
+association 
+{
+  0..1 Manager orderApprover -- * ShipmentOrder ordersForApproval;
+}
+
+use WareFlowTransferObjects.ump;
